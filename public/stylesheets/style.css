@@ -1,0 +1,95 @@
+body {
+    padding: 0px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+}
+
+.letter-cell {
+    display: inline-block;
+    font-size: 700%;
+    width: 115px;
+    height: 115px;
+    border: solid black 1px;
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color: #DBE4FF;
+}
+
+.letter-cell span {
+    font-size: 20%;
+    position: relative;
+    /* margin: 0px; */
+    float: left;
+    bottom: 28px;
+    right: -95px;
+    color: #C71800;
+    font-weight: bold;
+}
+.letter-cell.selected {
+    background-color: #ffff00;
+}
+
+.board {
+    height: 500px;
+    width: 500px;
+    position: fixed;
+    /*visibility: hidden;*/
+}
+
+#overlayCanvas {
+    height: 500px;
+    width: 500px;
+    position: fixed;
+    z-index: 100;
+}
+
+#position {
+    position: fixed;
+    left: 530px;
+    top: 10px;
+    font-size: 300%;
+    display: none;
+}
+
+
+#score {
+    position: fixed;
+    left: 515px;
+    top: 10px;
+    font-size: 300%;
+    color: #003BD1;
+    text-align: left;
+    /* border: solid; */
+    width: 106px;
+}
+
+#word {
+    position: fixed;
+    left: 515px;
+    top: 55px;
+    font-size: 300%;
+}
+#words {
+    position: fixed;
+    left: 515px;
+    top: 101px;
+    font-size: 150%;
+    max-width: 500px;
+}
+
+#words span{
+    margin-right: 6px;
+    display: inline-block;
+}
+
+#words span.mine{
+    color: #1e83ff;
+}
+
+#words span.theirs{
+    color: #ff4a2b;
+}

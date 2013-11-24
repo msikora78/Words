@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Words</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+      <!-- Libs -->
+      <script type="application/javascript" src="/socket.io/socket.io.js" ></script>
+      <script type="application/javascript" src="js/lib/jquery-2.0.0.js"></script>
+      <!--script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script-->
+      <script type="application/javascript" src="js/lib/jquery.mobile.custom.js"></script>
+      <script type="application/javascript" src="js/lib/underscore.js"></script>
+      <script type="application/javascript" src="js/lib/Class.js"></script>
+
+      <!-- Source -->
+      <script type="application/javascript" src="js/util/pen.js"></script>
+      <script type="application/javascript" src="js/util/util.js"></script>
+      <script type="application/javascript" src="js/util/touchTest.js"></script>
+
+
+      <script type="application/javascript" src="js/app.js"></script>
+
+  </head>
+  <body>
+
+  <canvas id="overlayCanvas" width="500" height="500" ></canvas>
+  <div id="board" class="board" >
+      <% for(var i = 0; i < board.length; i++) {
+          var row = board[i];
+          for(var j=0; j<row.length; j++) {
+          var letter = row[j] || "";
+          var smallCap = letter.toLowerCase();
+          var scoring = letterScoring.perLetter[smallCap];
+      %>
+      <div class="letter-cell" >
+          <div id="<%= 'letter-cell-'+ j + '-' + i %>" ><%= letter %></div>
+          <span class="letterScore"><%= scoring %></span>
+      </div>
+
+      <%    } %>
+      <br/>
+      <%  } %>
+  </div>
+  <div id="score" >0</div>
+  <div id="position" ></div>
+  <div id="word" ></div>
+  <div id="words" ></div>
+
+
+  </body>
+</html>

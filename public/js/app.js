@@ -1,23 +1,15 @@
 $(function($){
 	"use strict";
 
-
-    function init(){
-
-    }
-
-
     $('body').hide();
 
 	window.Draw = window.Draw || {};
 
-    var sid = Draw.Util.guid();
+    var $canvas = $('#overlayCanvas');
 
-	var canvas = document.getElementById('overlayCanvas');
-	var context = window.context = canvas.getContext('2d');	
-	var $canvas = $(canvas);
-	var currentRequest, currentPoint = null, lastPoint = null, buttonDown = false;
-    var activePen = new Draw.Pen(context);
+
+	var currentTouchPath, currentPoint = null, lastPoint = null, buttonDown = false;
+    var activePen = new Draw.Pen($canvas);
     var touchAreas = new Words.TouchAreas($canvas.width(),4,0.7);
     var currentWord = {};
     var totalScore = 0;
@@ -43,35 +35,28 @@ $(function($){
             //console.log(event);
             buttonDown = true;
             lastPoint = null;
-            currentRequest = {
-                sid: sid,
+            currentTouchPath = {
                 stroke: []
             };
             var point = draw(event);
-            currentRequest.t0 = point.t;
             event.preventDefault();
         },
 
         'vmouseup vmouseout': function(event){
             //console.log(event);
             buttonDown = false;
-            if(currentRequest) {
+            if(currentTouchPath) {
                 var point = draw(event);
                 lastPoint = null;
-                currentRequest.t1 = point.t;
-                currentRequest.pen = {
-                    width: activePen.width,
-                    color: activePen.color
-                };
-                processWord(currentRequest);
-                currentRequest = null;
+                processWord(currentTouchPath);
+                currentTouchPath = null;
             }
             event.preventDefault();
         },
 
         'vmousemove': function(event){
             //console.log(event);
-            if(buttonDown && currentRequest) draw (event);
+            if(buttonDown && currentTouchPath) draw (event);
             event.preventDefault();
         }
     });
@@ -84,11 +69,9 @@ $(function($){
 
         $('#position').text('[' + x + ',' + y + ']');
 
-        var t = Draw.Util.getRelativeTimestamp(event.timeStamp);
         currentPoint = {
             x: x,
-            y: y,
-            t: t
+            y: y
         };
 
         activePen.drawLine( lastPoint, currentPoint);
@@ -111,7 +94,7 @@ $(function($){
         }
 
         lastPoint = currentPoint;
-        currentRequest.stroke.push(activePen.pointToNormalized(currentPoint));
+        currentTouchPath.stroke.push(currentPoint);
         return currentPoint;
     }
 
@@ -180,14 +163,20 @@ $(function($){
 
     var board = [], words = {}, usedWords = {}, letterScoring = {};
 
-    $.ajax('/board')
-        .done(function(resp){
-            board = resp.board;
-            letterScoring = resp.letterScoring;
-            _.each(resp.words, function(word) {
-                    words[word] = true
-            });
-            $('body').show();
+    $.ajax('/board').done(render);
+
+    function render(resp){
+        board = resp.board;
+        letterScoring = resp.letterScoring;
+        _.each(resp.words, function(word) {
+            words[word] = true
         });
+
+        var tpl = $('#letters-tmpl').html();
+        var html = _.template(tpl, resp, {variable: 'd'});
+        $('#board').html(html);
+        console.log(html);
+        $('body').show();
+    }
 
 });

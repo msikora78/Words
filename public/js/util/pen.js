@@ -10,13 +10,19 @@ $(function($){
 	
 	Draw.Pen = Class.extend({
 		
-		init: function(context, width, color, ratio) {
+		init: function(canvas, width, color, ratio) {
             ratio = ratio || DEFAULT_RATIO;
-			this.context = context;
-			this.width = width || DEFAULT_WIDTH
-			this.color = color || DEFAULT_COLOR;
-			this.context.lineCap = DEFAULT_CAP;
-			this.setRatio(ratio)
+
+            if(canvas && canvas[0] && canvas[0].getContext) {
+                var context = canvas[0].getContext('2d');
+                this.context = context;
+                this.width = width || DEFAULT_WIDTH
+                this.color = color || DEFAULT_COLOR;
+                this.context.lineCap = DEFAULT_CAP;
+                this.setRatio(ratio)
+            } else {
+                throw new Error("param 'canvas' is not a jQuery canvas element!");
+            }
 		},
 		
 		setRatio: function(ratio) {

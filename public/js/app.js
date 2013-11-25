@@ -14,9 +14,6 @@ $(function($){
     var totalScore = 0;
     var socket = io.connect(window.location.origin);
 
-    socket.on('connect', function() {
-        console.log('On connect:', socket);
-    });
 
     socket.on('message', function (data) {
         if(data.word) {
@@ -117,6 +114,13 @@ $(function($){
 
     var board = [], words = {}, usedWords = {}, letterScoring = {};
 
+    socket.on('connect', function() {
+        console.log('On connect:', socket);
+        $('body').show();
+
+    });
+
+
     $.ajax('/board').done(render);
 
     function render(resp) {
@@ -129,7 +133,6 @@ $(function($){
         var tpl = $('#letters-tmpl').html();
         var html = _.template(tpl, resp, {variable: 'd'});
         $('#board').html(html);
-        $('body').show();
     }
 
 });

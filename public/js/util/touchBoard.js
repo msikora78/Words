@@ -11,7 +11,7 @@ $(function($){
             this.currentPoint = null;
             this.lastPoint = null;
             this.buttonDown = false;
-            this.activePen = new Draw.Pen(canvas);
+            this.activePen = new Draw.Pen(canvas,25,"rgba(100,155,255,0.1)"); //"rgba(0.3, 0.4, 0.5, 0.5)"
             this.touchAreas = new Words.TouchAreas(canvas.width(),4,0.7);
 
             _.bindAll(this);

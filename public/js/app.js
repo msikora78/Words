@@ -14,10 +14,20 @@ $(function($){
     var totalScore = 0;
     var socket = io.connect(window.location.origin);
 
+    socket.on('connect', function() {
+        console.log('On connect:', socket);
+    });
+
     socket.on('message', function (data) {
         if(data.word) {
             var word = data.word;
-            addWord(word,'theirs')
+            var ownerId = data.owner;
+            if(socket.socket && ownerId == socket.socket.sessionid) {
+                addScore(word);
+                addWord(word,'mine');
+            } else {
+                addWord(word,'theirs');
+            }
         } else {
             console.log("There is a problem:", data);
         }
@@ -72,9 +82,8 @@ $(function($){
 
     function checkMyWord (word){
         if(words[word] && !usedWords[word]) {
-            addWord(word,'mine');
+            addWord(word,'tentative');
             sendWord(word);
-            addScore(word);
         }
     }
 
@@ -94,9 +103,12 @@ $(function($){
     }
 
     function addWord(word, className) {
-        if(!usedWords[word]) {
-            usedWords[word] = true;
-            className = className || "";
+        usedWords[word] = true;
+        className = className || "";
+        if(className == 'mine') {
+            var $span = $('span.tentative').filter(function(i, el) {return $(el).text() == word; })
+            $span.removeClass('tentative').addClass(className);
+        } else {
             var $span = $('<span>').text(word).addClass(className);
             $('#words').append($span);
         }

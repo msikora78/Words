@@ -93,3 +93,7 @@ body {
 #words span.theirs{
     color: #ff4a2b;
 }
+
+#words span.tentative{
+    color: #000000;
+}

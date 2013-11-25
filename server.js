@@ -42,10 +42,24 @@ app.get('/board', routes.board);
 
 var io = require('socket.io').listen(app.listen(app.get('port')));
 
+var gameWords = {};
+var players = {};
+
 io.sockets.on('connection', function (socket) {
-    console.log('on connection:', socket.id);
+    players[socket.id] = true;
+    console.log('Players:', players);
     socket.on('send', function (data) {
         console.log('on send:', socket.id, data);
-        io.sockets.emit('message', data);
+        io.sockets.emit('message', {
+            word: data.word,
+            owner: socket.id
+        });
     });
+
+    socket.on('disconnect', function() {
+        console.log('on disconnect:', socket.id);
+        delete players[socket.id];
+        console.log('Players:', players);
+    })
 });
+
